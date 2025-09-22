@@ -1,9 +1,11 @@
-FROM debian:bullseye-slim
+FROM python:3.10-slim
+
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y wget curl unzip git build-essential python3 python3-pip && \
+    apt-get install -y wget curl unzip git build-essential && \
     rm -rf /var/lib/apt/lists/*
+
 
 # Install Arduino CLI and AVR cores
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh && \
