@@ -38,6 +38,7 @@ async def compile_code(req: CompileRequest):
         parsed = json.loads(content)
         code = parsed["code"]
         explanation = parsed["explanation"]
+        code = code.encode("utf-8").decode("unicode_escape")
     except json.JSONDecodeError:
         return {"error": "Failed to parse model output", "raw": content}
 
