@@ -10,6 +10,9 @@ import openai
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI()
+@app.get("/")
+def home():
+    return {"message": "RoboDict API is running!"}
 
 class CompileRequest(BaseModel):
     english_command: str
@@ -74,3 +77,7 @@ async def compile_code(req: CompileRequest):
         "explanation": explanation,
         "hex": hex_b64
     }
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 5000))  # use Render’s dynamic port
+    uvicorn.run("server:app", host="0.0.0.0", port=port)
