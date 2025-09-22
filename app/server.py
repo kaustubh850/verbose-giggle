@@ -17,7 +17,6 @@ def home():
 class CompileRequest(BaseModel):
     english_command: str
     board: str  # e.g. "arduino:avr:uno"
-
 @app.post("/compile")
 async def compile_code(req: CompileRequest):
     # 1. Ask OpenAI for code + explanation (JSON structured)
@@ -38,7 +37,7 @@ async def compile_code(req: CompileRequest):
     content = response["choices"][0]["message"]["content"]
 
     try:
-        parsed = json.loads(content)   # safe JSON parser
+        parsed = json.loads(content)
         code = parsed["code"]
         explanation = parsed["explanation"]
     except json.JSONDecodeError:
@@ -52,40 +51,38 @@ async def compile_code(req: CompileRequest):
         f.write(code)
 
     # 3. Compile with Arduino CLI
-   cmd = ["arduino-cli", "compile", "--fqbn", req.board, "--verbose", sketch_dir]
-result = subprocess.run(cmd, capture_output=True, text=True)
+    cmd = ["arduino-cli", "compile", "--fqbn", req.board, "--verbose", sketch_dir]
+    result = subprocess.run(cmd, capture_output=True, text=True)
 
-# Always log stdout/stderr so you can debug HEX location
-print("=== Arduino CLI STDOUT ===")
-print(result.stdout)
-print("=== Arduino CLI STDERR ===")
-print(result.stderr)
+    # Debug logs
+    print("=== Arduino CLI STDOUT ===")
+    print(result.stdout)
+    print("=== Arduino CLI STDERR ===")
+    print(result.stderr)
 
-if result.returncode != 0:
-    return {
-        "error": "Compilation failed",
-        "stdout": result.stdout,
-        "stderr": result.stderr
-    }
+    if result.returncode != 0:
+        return {
+            "error": "Compilation failed",
+            "stdout": result.stdout,
+            "stderr": result.stderr
+        }
 
-
-    # 4. Locate HEX file
-  # 4. Locate HEX file dynamically
-hex_path = None
-for root, _, files in os.walk(sketch_dir):
-    for f in files:
-        if f.endswith(".hex"):
-            hex_path = os.path.join(root, f)
+    # 4. Locate HEX file dynamically
+    hex_path = None
+    for root, _, files in os.walk(sketch_dir):
+        for f in files:
+            if f.endswith(".hex"):
+                hex_path = os.path.join(root, f)
+                break
+        if hex_path:
             break
-    if hex_path:
-        break
 
-if not hex_path:
-    return {
-        "error": "HEX not found",
-        "stdout": result.stdout,
-        "stderr": result.stderr
-    }
+    if not hex_path:
+        return {
+            "error": "HEX not found",
+            "stdout": result.stdout,
+            "stderr": result.stderr
+        }
 
     # 5. Base64 encode HEX
     with open(hex_path, "rb") as f:
@@ -96,6 +93,7 @@ if not hex_path:
         "explanation": explanation,
         "hex": hex_b64
     }
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.environ.get("PORT", 5000))  # use Render’s dynamic port
