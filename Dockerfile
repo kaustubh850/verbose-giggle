@@ -1,11 +1,9 @@
-FROM python:3.10-slim
-
+FROM debian:bullseye-slim
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y wget curl unzip git build-essential && \
+    apt-get install -y wget curl unzip git build-essential python3 python3-pip && \
     rm -rf /var/lib/apt/lists/*
-
 
 # Install Arduino CLI and AVR cores
 RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh && \
@@ -27,4 +25,3 @@ WORKDIR /app
 EXPOSE 5000
 
 CMD ["python3", "server.py"]
-
