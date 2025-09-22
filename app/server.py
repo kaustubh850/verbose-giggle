@@ -7,10 +7,12 @@ from pydantic import BaseModel
 import openai
 import shutil
 import tempfile
+
 # Load API key from environment variable
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI()
+
 @app.get("/")
 def home():
     return {"message": "RoboDict API is running!"}
@@ -18,6 +20,7 @@ def home():
 class CompileRequest(BaseModel):
     english_command: str
     board: str  # e.g. "arduino:avr:uno"
+
 @app.post("/compile")
 async def compile_code(req: CompileRequest):
 
@@ -38,16 +41,17 @@ async def compile_code(req: CompileRequest):
     except json.JSONDecodeError:
         return {"error": "Failed to parse model output", "raw": content}
 
-    # 2. Save sketch
-    sketch_dir = tempfile.mkdtemp(prefix="sketch_")
-
+    # 2. Save sketch in a fixed-name folder for Arduino CLI
+    tmp_dir = tempfile.mkdtemp(prefix="arduino_")  # temp parent
+    sketch_name = "sketch"  # fixed simple name
+    sketch_dir = os.path.join(tmp_dir, sketch_name)
     os.makedirs(sketch_dir, exist_ok=True)
-    sketch_path = os.path.join(sketch_dir, "sketch.ino")
+    sketch_path = os.path.join(sketch_dir, f"{sketch_name}.ino")
     with open(sketch_path, "w") as f:
         f.write(code)
 
-    # 3. Compile with Arduino CLI (properly indented inside function)
-    build_dir = tempfile.mkdtemp(prefix="build_")
+    # 3. Compile with Arduino CLI
+    build_dir = os.path.join(tmp_dir, "build")
     if os.path.exists(build_dir):
         shutil.rmtree(build_dir)
     os.makedirs(build_dir, exist_ok=True)
@@ -89,6 +93,9 @@ async def compile_code(req: CompileRequest):
     # 6. Base64 encode HEX
     with open(hex_path, "rb") as f:
         hex_b64 = base64.b64encode(f.read()).decode()
+
+    # 7. Cleanup temp folder (optional)
+    shutil.rmtree(tmp_dir, ignore_errors=True)
 
     return {"code": code, "explanation": explanation, "hex": hex_b64}
 
