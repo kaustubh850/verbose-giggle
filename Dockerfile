@@ -21,5 +21,7 @@ RUN pip3 install -r requirements.txt
 # Copy app
 COPY app /app
 WORKDIR /app
+# Expose FastAPI port
+EXPOSE 5000
 
-CMD ["python3", "server.py"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "5000"]
