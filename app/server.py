@@ -52,21 +52,40 @@ async def compile_code(req: CompileRequest):
         f.write(code)
 
     # 3. Compile with Arduino CLI
-    cmd = ["arduino-cli", "compile", "--fqbn", req.board, sketch_dir]
-    result = subprocess.run(cmd, capture_output=True, text=True)
+   cmd = ["arduino-cli", "compile", "--fqbn", req.board, "--verbose", sketch_dir]
+result = subprocess.run(cmd, capture_output=True, text=True)
 
-    if result.returncode != 0:
-        return {
-            "error": "Compilation failed",
-            "stdout": result.stdout,
-            "stderr": result.stderr
-        }
+# Always log stdout/stderr so you can debug HEX location
+print("=== Arduino CLI STDOUT ===")
+print(result.stdout)
+print("=== Arduino CLI STDERR ===")
+print(result.stderr)
+
+if result.returncode != 0:
+    return {
+        "error": "Compilation failed",
+        "stdout": result.stdout,
+        "stderr": result.stderr
+    }
+
 
     # 4. Locate HEX file
-    build_dir = os.path.join(sketch_dir, "build", req.board.replace(":", "."))
-    hex_path = os.path.join(build_dir, "sketch.ino.hex")
-    if not os.path.exists(hex_path):
-        return {"error": "HEX not found", "details": build_dir}
+  # 4. Locate HEX file dynamically
+hex_path = None
+for root, _, files in os.walk(sketch_dir):
+    for f in files:
+        if f.endswith(".hex"):
+            hex_path = os.path.join(root, f)
+            break
+    if hex_path:
+        break
+
+if not hex_path:
+    return {
+        "error": "HEX not found",
+        "stdout": result.stdout,
+        "stderr": result.stderr
+    }
 
     # 5. Base64 encode HEX
     with open(hex_path, "rb") as f:
