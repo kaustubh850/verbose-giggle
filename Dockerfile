@@ -10,28 +10,32 @@ RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/inst
     arduino-cli core update-index && \
     arduino-cli core install arduino:avr
 
-RUN arduino-cli lib install "Servo"
-RUN arduino-cli lib install "LiquidCrystal"
-RUN arduino-cli lib install "SoftwareSerial"
-RUN arduino-cli lib install "Adafruit NeoPixel"
-RUN arduino-cli lib install "Stepper"
-RUN arduino-cli lib install "Adafruit GFX Library"
-RUN arduino-cli lib install "Adafruit SSD1306"
-RUN arduino-cli lib install "Adafruit SH1106"
-RUN arduino-cli lib install "TouchScreen"
-RUN arduino-cli lib install "TFT"
-RUN arduino-cli lib install "TFT_eSPI"
-RUN arduino-cli lib install "Adafruit ILI9341"
-RUN arduino-cli lib install "Adafruit BusIO"
-RUN arduino-cli lib install "Adafruit Sensor"
-RUN arduino-cli lib install "Adafruit TCS34725"
-RUN arduino-cli lib install "Adafruit Motor Shield"
-RUN arduino-cli lib install "Adafruit PWM Servo Driver"
-RUN arduino-cli lib install "Ultrasonic"
-RUN arduino-cli lib install "DHT sensor library"
-RUN arduino-cli lib install "Adafruit BNO055"
-RUN arduino-cli lib install "Adafruit LSM9DS1"
-RUN arduino-cli lib install "Adafruit INA219"
+# Install Arduino libraries (continue even if some fail)
+RUN arduino-cli lib install "Servo" || true \
+ && arduino-cli lib install "Wire" || true \
+ && arduino-cli lib install "EEPROM" || true \
+ && arduino-cli lib install "LiquidCrystal" || true \
+ && arduino-cli lib install "SoftwareSerial" || true \
+ && arduino-cli lib install "SPI" || true \
+ && arduino-cli lib install "Adafruit NeoPixel" || true \
+ && arduino-cli lib install "Stepper" || true \
+ && arduino-cli lib install "Adafruit GFX Library" || true \
+ && arduino-cli lib install "Adafruit SSD1306" || true \
+ && arduino-cli lib install "Adafruit SH1106" || true \
+ && arduino-cli lib install "TouchScreen" || true \
+ && arduino-cli lib install "TFT" || true \
+ && arduino-cli lib install "TFT_eSPI" || true \
+ && arduino-cli lib install "Adafruit ILI9341" || true \
+ && arduino-cli lib install "Adafruit BusIO" || true \
+ && arduino-cli lib install "Adafruit Sensor" || true \
+ && arduino-cli lib install "Adafruit TCS34725" || true \
+ && arduino-cli lib install "Adafruit Motor Shield" || true \
+ && arduino-cli lib install "Adafruit PWM Servo Driver" || true \
+ && arduino-cli lib install "Ultrasonic" || true \
+ && arduino-cli lib install "DHT sensor library" || true \
+ && arduino-cli lib install "Adafruit BNO055" || true \
+ && arduino-cli lib install "Adafruit LSM9DS1" || true \
+ && arduino-cli lib install "Adafruit INA219" || true
 
 
     
