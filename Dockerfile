@@ -11,11 +11,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/inst
     arduino-cli core install arduino:avr
 
 RUN arduino-cli lib install "Servo"
-RUN arduino-cli lib install "Wire"
-RUN arduino-cli lib install "EEPROM"
 RUN arduino-cli lib install "LiquidCrystal"
 RUN arduino-cli lib install "SoftwareSerial"
-RUN arduino-cli lib install "SPI"
 RUN arduino-cli lib install "Adafruit NeoPixel"
 RUN arduino-cli lib install "Stepper"
 RUN arduino-cli lib install "Adafruit GFX Library"
@@ -35,6 +32,7 @@ RUN arduino-cli lib install "DHT sensor library"
 RUN arduino-cli lib install "Adafruit BNO055"
 RUN arduino-cli lib install "Adafruit LSM9DS1"
 RUN arduino-cli lib install "Adafruit INA219"
+
 
     
 # Set working directory
