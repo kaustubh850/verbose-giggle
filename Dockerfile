@@ -10,32 +10,32 @@ RUN curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/inst
     arduino-cli core update-index && \
     arduino-cli core install arduino:avr
 
-# Install a big set of common Arduino libraries
-RUN arduino-cli lib install "Servo" \
-    && arduino-cli lib install "Wire" \
-    && arduino-cli lib install "EEPROM" \
-    && arduino-cli lib install "LiquidCrystal" \
-    && arduino-cli lib install "SoftwareSerial" \
-    && arduino-cli lib install "SPI" \
-    && arduino-cli lib install "Adafruit NeoPixel" \
-    && arduino-cli lib install "Stepper" \
-    && arduino-cli lib install "Adafruit GFX Library" \
-    && arduino-cli lib install "Adafruit SSD1306" \
-    && arduino-cli lib install "Adafruit SH1106" \
-    && arduino-cli lib install "TouchScreen" \
-    && arduino-cli lib install "TFT" \
-    && arduino-cli lib install "TFT_eSPI" \
-    && arduino-cli lib install "Adafruit ILI9341" \
-    && arduino-cli lib install "Adafruit BusIO" \
-    && arduino-cli lib install "Adafruit Sensor" \
-    && arduino-cli lib install "Adafruit TCS34725" \
-    && arduino-cli lib install "Adafruit Motor Shield" \
-    && arduino-cli lib install "Adafruit PWM Servo Driver" \
-    && arduino-cli lib install "Ultrasonic" \
-    && arduino-cli lib install "DHT sensor library" \
-    && arduino-cli lib install "Adafruit BNO055" \
-    && arduino-cli lib install "Adafruit LSM9DS1" \
-    && arduino-cli lib install "Adafruit INA219"
+RUN arduino-cli lib install "Servo"
+RUN arduino-cli lib install "Wire"
+RUN arduino-cli lib install "EEPROM"
+RUN arduino-cli lib install "LiquidCrystal"
+RUN arduino-cli lib install "SoftwareSerial"
+RUN arduino-cli lib install "SPI"
+RUN arduino-cli lib install "Adafruit NeoPixel"
+RUN arduino-cli lib install "Stepper"
+RUN arduino-cli lib install "Adafruit GFX Library"
+RUN arduino-cli lib install "Adafruit SSD1306"
+RUN arduino-cli lib install "Adafruit SH1106"
+RUN arduino-cli lib install "TouchScreen"
+RUN arduino-cli lib install "TFT"
+RUN arduino-cli lib install "TFT_eSPI"
+RUN arduino-cli lib install "Adafruit ILI9341"
+RUN arduino-cli lib install "Adafruit BusIO"
+RUN arduino-cli lib install "Adafruit Sensor"
+RUN arduino-cli lib install "Adafruit TCS34725"
+RUN arduino-cli lib install "Adafruit Motor Shield"
+RUN arduino-cli lib install "Adafruit PWM Servo Driver"
+RUN arduino-cli lib install "Ultrasonic"
+RUN arduino-cli lib install "DHT sensor library"
+RUN arduino-cli lib install "Adafruit BNO055"
+RUN arduino-cli lib install "Adafruit LSM9DS1"
+RUN arduino-cli lib install "Adafruit INA219"
+
     
 # Set working directory
 WORKDIR /workspace
