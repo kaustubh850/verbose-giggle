@@ -28,7 +28,7 @@ async def compile_code(req: CompileRequest):
     response = openai.ChatCompletion.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You convert English into Arduino sketches. Respond ONLY in valid JSON with keys: 'code' and 'explanation'."},
+            {"role": "system", "content": "You convert English into Arduino sketches. Respond ONLY in valid JSON with keys: 'code' and 'explanation'. The code should be correct, with parsable json output, with correctly placed , classified unicode spaces , escapes. No error should occur while parsing the output to utf-8"},
             {"role": "user", "content": req.english_command}
         ]
     )
