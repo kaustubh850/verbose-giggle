@@ -7,6 +7,7 @@ from pydantic import BaseModel
 import openai
 import shutil
 import tempfile
+from urllib.parse import unquote
 
 # Load API key from environment variable
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -22,9 +23,12 @@ async def compile_code(
     english_command: str = Query(..., description="Base64 encoded English command"),
     board: str = Query(..., description="Arduino board FQBN, e.g., arduino:avr:uno")
 ):
+    print(f"Received request - english_command: {english_command}, board: {board}")  # Debug log
+    
     try:
         # Decode the base64 encoded english command
         decoded_command = base64.b64decode(english_command).decode('utf-8')
+        print(f"Decoded command: {decoded_command}")  # Debug log
     except Exception as e:
         return {"error": f"Failed to decode base64 English command: {str(e)}"}
 
@@ -38,6 +42,7 @@ async def compile_code(
             ]
         )
         content = response["choices"][0]["message"]["content"]
+        print(f"OpenAI response: {content}")  # Debug log
 
         try:
             parsed = json.loads(content)
